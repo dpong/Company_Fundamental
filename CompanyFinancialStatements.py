@@ -9,13 +9,17 @@ Created on Fri Jul 19 10:49:03 2019
 """
 
 import json,requests,pickle,os
+import datetime
 import pandas as pd
 
+time = datetime.datetime.now()
+year = time.year
+month = time.month
 
 def get_profile(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Company_profile.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Company_profile_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/company/profile/'+'{}'.format(ticker)
         response = requests.get(url)
         dataset = response.json()
@@ -23,18 +27,18 @@ def get_profile(ticker):
         df['Keys'] = dataset['profile'].keys()
         df=df.set_index('Keys')
         df['profile'] = dataset['profile'].values()
-        with open('Fundamental_data/{}_Company_profile.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Company_profile_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Company_profile'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Company_profile.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Company_profile_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_quarterly_income(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Quarterly_income_statement.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Quarterly_income_statement_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/financials/income-statement/'+'{}'.format(ticker)+'?period=quarter'
         response = requests.get(url)
         dataset = response.json()
@@ -44,18 +48,18 @@ def get_quarterly_income(ticker):
         dicts = len(dataset['financials'])
         for i in range(dicts):
             df['{}_Quarter'.format(i)] = dataset['financials'][i].values()
-        with open('Fundamental_data/{}_Quarterly_income_statement.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Quarterly_income_statement_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Quarterly_income_statement'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Quarterly_income_statement.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Quarterly_income_statement_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_quarterly_balance_sheet(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Quarterly_balance_sheet.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Quarterly_balance_sheet_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/financials/balance-sheet-statement/'+'{}'.format(ticker)+'?period=quarter'
         response = requests.get(url)
         dataset = response.json()
@@ -65,18 +69,18 @@ def get_quarterly_balance_sheet(ticker):
         dicts = len(dataset['financials'])
         for i in range(dicts):
             df['{}_Quarter'.format(i)] = dataset['financials'][i].values()
-        with open('Fundamental_data/{}_Quarterly_balance_sheet.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Quarterly_balance_sheet_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Quarterly_balance_sheet'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Quarterly_balance_sheet.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Quarterly_balance_sheet_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_quarterly_cash_flow(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Quarterly_cash_flow.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Quarterly_cash_flow_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/financials/cash-flow-statement/'+'{}'.format(ticker)+'?period=quarter'
         response = requests.get(url)
         dataset = response.json()
@@ -86,18 +90,18 @@ def get_quarterly_cash_flow(ticker):
         dicts = len(dataset['financials'])
         for i in range(dicts):
             df['{}_Quarter'.format(i)] = dataset['financials'][i].values()
-        with open('Fundamental_data/{}_Quarterly_cash_flow.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Quarterly_cash_flow_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Quarterly_cash_flow'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Quarterly_cash_flow.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Quarterly_cash_flow_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_quarterly_financial_growth(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Quarterly_financial_growth.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Quarterly_financial_growth_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/financial-statement-growth/'+'{}'.format(ticker)+'?period=quarter'
         response = requests.get(url)
         dataset = response.json()
@@ -107,18 +111,18 @@ def get_quarterly_financial_growth(ticker):
         dicts = len(dataset['growth'])
         for i in range(dicts):
             df['{}_Quarter'.format(i)] = dataset['growth'][i].values()
-        with open('Fundamental_data/{}_Quarterly_financial_growth.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Quarterly_financial_growth_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Quarterly_financial_growth'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Quarterly_financial_growth.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Quarterly_financial_growth_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_quarterly_key_metrics(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Quarterly_key_metrics.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Quarterly_key_metrics_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/company-key-metrics/'+'{}'.format(ticker)
         response = requests.get(url)
         dataset = response.json()
@@ -128,18 +132,18 @@ def get_quarterly_key_metrics(ticker):
         dicts = len(dataset['metrics'])
         for i in range(dicts):
             df['{}_Quarter'.format(i)] = dataset['metrics'][i].values()
-        with open('Fundamental_data/{}_Quarterly_key_metrics.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Quarterly_key_metrics_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(df,f)
     else:
         print('Already have {}_Quarterly_key_metrics'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Quarterly_key_metrics.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Quarterly_key_metrics_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df = pickle.load(pickle_in)
     return df
 
 def get_company_rating(ticker):
     if not os.path.exists('Fundamental_data'):
         os.makedirs('Fundamental_data')   
-    if not os.path.exists('Fundamental_data/{}_Company_rating.pickle'.format(ticker)):
+    if not os.path.exists('Fundamental_data/{}_Company_rating_{}_{}.pickle'.format(ticker,year,month)):
         url = 'https://financialmodelingprep.com/api/v3/company/rating/'+'{}'.format(ticker)
         response = requests.get(url)
         dataset = response.json()
@@ -157,11 +161,11 @@ def get_company_rating(ticker):
         df_detail['P/E'] = dataset['ratingDetails']['P/E'].values()
         df_detail['P/B'] = dataset['ratingDetails']['P/B'].values()
         pickle_save = [df,df_detail]
-        with open('Fundamental_data/{}_Company_rating.pickle'.format(ticker),'wb') as f:
+        with open('Fundamental_data/{}_Company_rating_{}_{}.pickle'.format(ticker,year,month),'wb') as f:
             pickle.dump(pickle_save,f)
     else:
         print('Already have {}_Company_rating'.format(ticker))
-        pickle_in = open('Fundamental_data/{}_Company_rating.pickle'.format(ticker),'rb')    
+        pickle_in = open('Fundamental_data/{}_Company_rating_{}_{}.pickle'.format(ticker,year,month),'rb')    
         df, df_detail = pickle.load(pickle_in)
     return df,df_detail
 
